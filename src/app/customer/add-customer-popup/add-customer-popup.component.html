@@ -1,0 +1,73 @@
+<div *ngIf="isPageLoaded">
+  <strong mat-dialog-title>
+    <span *ngIf="customer.id > 0; else addCustomerheading"
+      >Update Customer</span
+    >
+    <ng-template #addCustomerheading> Add Customer </ng-template>
+  </strong>
+  <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
+    <mat-dialog-content>
+      <div class="row">
+        <!-- First Name -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              placeholder="First Name"
+              formControlName="firstName"
+            />
+            <mat-error *ngIf="errorHandling('firstName', 'required')"
+              >Please enter first name</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <!-- Last Name -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              placeholder="Last Name"
+              formControlName="lastName"
+            />
+            <mat-error *ngIf="errorHandling('lastName', 'required')"
+              >Please enter last name</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <!-- Date of Birth -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>Date Of Birth</mat-label>
+            <input
+              matInput
+              readonly
+              [matDatepicker]="picker"
+              placeholder="Date of birth"
+              formControlName="birthDate"
+              (click)="picker.open()"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="errorHandling('birthDate', 'required')"
+              >Please enter date of birth</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="warn" [mat-dialog-close]="true">
+        Cancel
+      </button>
+      <button type="submit" mat-flat-button color="primary" cdkFocusInitial>
+        Save
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

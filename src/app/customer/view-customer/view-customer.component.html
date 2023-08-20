@@ -1,0 +1,77 @@
+<dx-data-grid
+  [dataSource]="customerList"
+  (onToolbarPreparing)="onToolbarPreparing($event)"
+  (onContentReady)="onContentReady($event)"
+  [focusedRowEnabled]="true"
+  [(focusedRowKey)]="focusedRowKey"
+  [(autoNavigateToFocusedRow)]="autoNavigateToFocusedRow"
+  (onFocusedRowChanging)="onFocusedRowChanging($event)"
+  (onRowClick)="onRowClick($event)"
+  [rowAlternationEnabled]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [allowColumnReordering]="true"
+  [remoteOperations]="true"
+  [showBorders]="true"
+>
+  <dxo-filter-row [visible]="false"></dxo-filter-row>
+  <dxo-header-filter [visible]="false"></dxo-header-filter>
+  <dxo-filter-panel [visible]="false"></dxo-filter-panel>
+  <dxo-group-panel [visible]="false"></dxo-group-panel>
+  <dxo-scrolling
+    [useNative]="true"
+    [scrollByContent]="true"
+    [scrollByThumb]="true"
+    showScrollbar="onHover"
+  ></dxo-scrolling>
+  <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-export
+    [enabled]="false"
+    [allowExportSelectedData]="true"
+    fileName="customers"
+  ></dxo-export>
+
+  <dxi-column
+    dataField="firstName"
+    dataType="string"
+    caption="First Name"
+  ></dxi-column>
+  <dxi-column
+    dataField="lastName"
+    dataType="string"
+    caption="Last Name"
+  ></dxi-column>
+  <dxi-column
+    dataField="birthDate"
+    dataType="string"
+    caption="Date Of Birth"
+    cellTemplate="birthDateTemplate"
+  ></dxi-column>
+
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[10, 25, 50, 100]"
+  ></dxo-pager>
+
+  <div *dxTemplate="let row of 'birthDateTemplate'">
+    <span *ngIf="row.data?.birthDate?.length > 0">{{
+      row.data.birthDate[1] +
+        "/" +
+        row.data.birthDate[2] +
+        "/" +
+        row.data.birthDate[0]
+    }}</span>
+  </div>
+  <div *dxTemplate="let data of 'totalCount'">
+    <div class="informer">
+      <strong class="white">
+        &nbsp;<small style="font-size: 0.9rem"
+          >Total Records: {{ totalRecords }}</small
+        >
+      </strong>
+    </div>
+  </div>
+</dx-data-grid>
+<br />

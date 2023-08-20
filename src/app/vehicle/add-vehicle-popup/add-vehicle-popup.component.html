@@ -1,0 +1,112 @@
+<div *ngIf="isPageLoaded">
+  <strong mat-dialog-title>
+    <span *ngIf="vehicleId > 0; else addVehicleheading">Update Vehicle</span>
+    <ng-template #addVehicleheading> Add Vehicle </ng-template>
+  </strong>
+  <form [formGroup]="vehicleForm" (ngSubmit)="saveVehicle()">
+    <mat-dialog-content>
+      <div class="row">
+        <!-- Brand -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-select
+              formControlName="brand"
+              placeholder="Brand"
+              (selectionChange)="GetModels()"
+            >
+              <input
+                (keydown)="$event.stopPropagation()"
+                formControlName="brandSearch"
+                placeholder="Search"
+                matInput
+                class="dropdown-searchbox"
+              />
+              <mat-option
+                *ngFor="let brand of brandList"
+                [value]="brand.name"
+                >{{ brand.name }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="errorHandling('brand', 'required')"
+              >Please select brand</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <!-- Model -->
+        <div class="col-md-12 no-padding-lr">
+          <div class="col-md-12 no-padding-lr">
+            <mat-form-field class="with-100">
+              <mat-label>Model</mat-label>
+              <mat-select formControlName="model" placeholder="Model">
+                <input
+                  (keydown)="$event.stopPropagation()"
+                  formControlName="modelSearch"
+                  placeholder="Search"
+                  matInput
+                  class="dropdown-searchbox"
+                />
+                <mat-option
+                  *ngFor="let model of modelList"
+                  [value]="model.name"
+                  >{{ model.name }}</mat-option
+                >
+              </mat-select>
+              <mat-error *ngIf="errorHandling('model', 'required')"
+                >Please select model</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- Model Year -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>Model Year</mat-label>
+            <input
+              matInput
+              placeholder="Model Year"
+              formControlName="modelYear"
+              mask="0000"
+            />
+            <mat-error *ngIf="errorHandling('modelYear', 'required')"
+              >Please enter model year</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <!-- VIN -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>VIN</mat-label>
+            <input matInput placeholder="VIN" formControlName="vin" />
+          </mat-form-field>
+        </div>
+        <!-- Price -->
+        <div class="col-md-12 no-padding-lr">
+          <mat-form-field class="with-100">
+            <mat-label>Price</mat-label>
+            <input
+              matInput
+              placeholder="Price"
+              formControlName="price"
+              suffix=" €"
+              mask="separator.2"
+              thousandSeparator="."
+              decimalMarker=","
+            />
+            <mat-error *ngIf="errorHandling('price', 'required')"
+              >Please enter price</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="warn" [mat-dialog-close]="true">
+        Cancel
+      </button>
+      <button type="submit" mat-flat-button color="primary" cdkFocusInitial>
+        Save
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

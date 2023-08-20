@@ -1,0 +1,290 @@
+<mat-card class="page-container" *ngIf="isPageLoaded === true">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/contract">Contract</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Contract Detail
+      </li>
+    </ol>
+  </nav>
+
+  <mat-vertical-stepper [linear]="false" #stepper>
+    <mat-step
+      [stepControl]="contractForm"
+      errorMessage="Contract detail required."
+    >
+      <div class="col-12"><h2>Contract Detail</h2></div>
+      <form [formGroup]="contractForm">
+        <ng-template matStepLabel>Contract Info</ng-template>
+        <div class="col-md-6">
+          <mat-form-field class="with-100">
+            <mat-label>Monthly Rate</mat-label>
+            <input
+              matInput
+              placeholder="Monthly Rate"
+              formControlName="monthlyRate"
+              suffix=" €"
+              mask="separator.2"
+              thousandSeparator="."
+              decimalMarker=","
+            />
+            <mat-error
+              *ngIf="errorHandling(contractForm, 'monthlyRate', 'required')"
+              >Please enter monthly rate</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div>
+          <button
+            type="submit"
+            class="pull-right"
+            mat-raised-button
+            color="primary"
+            (click)="MoveNext(contractForm, stepper)"
+          >
+            Next
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step
+      [stepControl]="customerForm"
+      errorMessage="Customer detail required."
+    >
+      <form [formGroup]="customerForm">
+        <ng-template matStepLabel>Customer Info</ng-template>
+
+        <div class="col-12"><h2>Customer Detail</h2></div>
+        <div class="col-12" *ngIf="customerEditMode == false; else addCustomer">
+          <div class="row">
+            <div class="col-12 p-3">
+              <button
+                mat-raised-button
+                color="primary"
+                class="pull-right"
+                (click)="customerEditMode = true"
+              >
+                <mat-icon>edit</mat-icon>&nbsp;Edit
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                class="pull-right mr-5px"
+                (click)="OnDeleteCustomer()"
+              >
+                <mat-icon>delete</mat-icon>&nbsp;Delete
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 pull-left">
+              <mat-form-field class="with-100">
+                <mat-label>First Name</mat-label>
+                <input
+                  matInput
+                  placeholder="First Name"
+                  formControlName="firstName"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 pull-left">
+              <mat-form-field class="with-100">
+                <mat-label>Last Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 pull-left">
+              <mat-form-field class="with-100">
+                <mat-label>Date Of Birth</mat-label>
+                <input
+                  matInput
+                  placeholder="Date Of Birth"
+                  formControlName="birthDate"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <ng-template #addCustomer>
+          <div class="alert alert-primary" role="alert">
+            Please select or add new customer
+          </div>
+          <app-view-customer
+            (onSelectCustomer)="OnAddCustomer($event)"
+            [focusedRowKey]="contractDto?.customer?.id"
+          ></app-view-customer>
+        </ng-template>
+
+        <div *ngIf="customerEditMode == false; else cancelCustomer">
+          <button
+            class="pull-right"
+            mat-raised-button
+            color="primary"
+            (click)="MoveNext(customerForm, stepper)"
+          >
+            Next
+          </button>
+          <button
+            class="mr-5px pull-right"
+            mat-raised-button
+            color="warn"
+            matStepperPrevious
+          >
+            Back
+          </button>
+        </div>
+        <ng-template #cancelCustomer>
+          <button
+            class="pull-right"
+            (click)="SetCustomerMode(true, stepper)"
+            mat-raised-button
+            color="warn"
+          >
+            Back
+          </button>
+        </ng-template>
+      </form>
+    </mat-step>
+    <mat-step
+      [stepControl]="vehicleForm"
+      errorMessage="Vehicle detail required."
+    >
+      <form [formGroup]="vehicleForm">
+        <ng-template matStepLabel>Vehicle Info</ng-template>
+
+        <div class="col-12"><h2>Vehicle Detail</h2></div>
+        <div class="col-12" *ngIf="vehicleEditMode == false; else addVehicle">
+          <div class="row">
+            <div class="col-12 p-3">
+              <button
+                mat-raised-button
+                color="primary"
+                class="pull-right"
+                (click)="vehicleEditMode = true"
+              >
+                <mat-icon>edit</mat-icon>&nbsp;Edit
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                class="pull-right mr-5px"
+                (click)="OnDeleteVehicle()"
+              >
+                <mat-icon>delete</mat-icon>&nbsp;Delete
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="col-md-4 pull-left">
+                <mat-form-field class="with-98">
+                  <mat-label>Brand</mat-label>
+                  <input
+                    matInput
+                    placeholder="Brand"
+                    formControlName="brand"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4 pull-left">
+                <mat-form-field class="with-98">
+                  <mat-label>Model</mat-label>
+                  <input
+                    matInput
+                    placeholder="Model"
+                    formControlName="model"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4 pull-left">
+                <mat-form-field class="with-98">
+                  <mat-label>Model Year</mat-label>
+                  <input
+                    matInput
+                    placeholder="Model Year"
+                    formControlName="modelYear"
+                    mask="0000"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4 pull-left">
+                <mat-form-field class="with-98">
+                  <mat-label>Price</mat-label>
+                  <input
+                    matInput
+                    placeholder="Price"
+                    formControlName="price"
+                    suffix=" €"
+                    mask="separator.2"
+                    thousandSeparator="."
+                    decimalMarker=","
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4 pull-left">
+                <mat-form-field class="with-98">
+                  <mat-label>VIN</mat-label>
+                  <input
+                    matInput
+                    placeholder="vin"
+                    formControlName="vin"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #addVehicle>
+          <div class="alert alert-primary" role="alert">
+            Please select or add new vehicle
+          </div>
+          <app-view-vehicle
+            (onSelectVehicle)="OnAddVehicle($event)"
+            [focusedRowKey]="contractDto?.vehicle?.id"
+          ></app-view-vehicle>
+        </ng-template>
+
+        <div *ngIf="vehicleEditMode == false; else cancelVehicle">
+          <button
+            class="pull-right"
+            mat-raised-button
+            color="primary"
+            (click)="SaveContract()"
+          >
+            Save
+          </button>
+          <button
+            class="mr-5px pull-right"
+            mat-raised-button
+            color="warn"
+            matStepperPrevious
+          >
+            Back
+          </button>
+        </div>
+        <ng-template #cancelVehicle>
+          <button
+            class="pull-right"
+            (click)="SetVehicleMode(true, stepper)"
+            mat-raised-button
+            color="warn"
+          >
+            Back
+          </button>
+        </ng-template>
+      </form>
+    </mat-step>
+  </mat-vertical-stepper>
+</mat-card>

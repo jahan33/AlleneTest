@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()" matTooltip="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Allane</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened="true"
+    [class.mat-elevation-z4]="true"
+    class="app-sidenav"
+  >
+    <mat-nav-list>
+      <mat-list-item routerLink="/contract" [routerLinkActive]="['is-active']">
+        <mat-icon class="pull-left">dashboard</mat-icon><span>Contracts</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/customer" [routerLinkActive]="['is-active']">
+        <mat-icon class="pull-left">supervisor_account</mat-icon
+        ><span>Customers</span>
+      </mat-list-item>
+      <mat-list-item
+        mat-list-item
+        routerLink="/vehicle"
+        [routerLinkActive]="['is-active']"
+      >
+        <mat-icon class="pull-left">commute</mat-icon><span>Vehicles</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet> </router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
